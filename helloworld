@@ -1,5 +1,5 @@
 #In HTML format I would set up a Web server and host a simple HTML page with this text. Create S3 bucket. Upload the HTML file. Set the permissions. 
-#Enable static Web hosting. Get Website URL and acceed the website URL. 
+#Enable static Web hosting. Get Website URL and acceed the website URL and access my website. 
 
 <!DOCTYPE html>
 <html>
