@@ -1,3 +1,4 @@
+# I can create a cloud formation template in this format. 
 Resources:
   HelloWorldLambdaFunction:
     Type: AWS::Lambda::Function
