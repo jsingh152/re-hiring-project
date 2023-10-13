@@ -1,4 +1,4 @@
-#I can update buildspec.yaml this way. 
+#I can update buildspec.yaml this way to create pipeline deployment code. 
 version: 0.2
 
 phases:
