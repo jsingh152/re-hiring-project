@@ -1,0 +1,77 @@
+Resources:
+  HelloWorldLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: HelloWorldFunction
+      Handler: index.handler
+      Role: <your-Lambda-execution-role>
+      Code:
+        S3Bucket: <specify your-S3-bucket>
+        S3Key: <your-deployment-package.zip>
+      Environment:
+        Variables:
+          ENVIRONMENT: prod
+      Runtime: nodejs14.x
+
+  HelloWorldApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: HelloWorldApi
+
+  HelloWorldApiResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId:
+        Fn::GetAtt:
+          - HelloWorldApi
+          - Id
+      ParentId:
+        Fn::GetAtt:
+          - HelloWorldApi
+          - RootResourceId
+
+  HelloWorldApiMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: GET
+      ResourceId:
+        Fn::GetAtt:
+          - HelloWorldApiResource
+          - Id
+      RestApiId:
+        Fn::Ref: HelloWorldApi
+
+  HelloWorldApiIntegration:
+    Type: AWS::ApiGateway::Integration
+    Properties:
+      IntegrationHttpMethod: POST
+      Type: AWS_PROXY
+      Uri:
+        Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2023-03-31/functions/${HelloWorldLambdaFunction.Arn}/invocations
+      RestApiId:
+        Fn::Ref: HelloWorldApi
+
+  HelloWorldApiMethodResponse:
+    Type: AWS::ApiGateway::MethodResponse
+    Properties:
+      HttpMethod: GET
+      ResourceId:
+        Fn::GetAtt:
+          - HelloWorldApiResource
+          - Id
+      RestApiId:
+        Fn::Ref: HelloWorldApi
+      StatusCode: 200
+
+  HelloWorldApiIntegrationResponse:
+    Type: AWS::ApiGateway::IntegrationResponse
+    Properties:
+      HttpMethod: GET
+      ResourceId:
+        Fn::GetAtt:
+          - HelloWorldApiResource
+          - Id
+      RestApiId:
+        Fn::Ref: HelloWorldApi
+      StatusCode: 200
